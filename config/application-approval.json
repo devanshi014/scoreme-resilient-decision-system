@@ -1,0 +1,64 @@
+{
+  "workflowId": "application-approval",
+  "version": 1,
+  "name": "Application Approval",
+  "description": "A configurable loan/application review workflow used to demonstrate decisions, reviews and retries.",
+  "initialState": "RECEIVED",
+  "rules": [
+    {
+      "id": "R001",
+      "name": "Required applicant fields",
+      "type": "mandatory",
+      "field": "applicant.name",
+      "operator": "notEmpty",
+      "failureOutcome": "REJECTED",
+      "reason": "Applicant name is required."
+    },
+    {
+      "id": "R002",
+      "name": "Minimum age",
+      "type": "threshold",
+      "field": "applicant.age",
+      "operator": "gte",
+      "value": 18,
+      "failureOutcome": "REJECTED",
+      "reason": "Applicant must be at least 18 years old."
+    },
+    {
+      "id": "R003",
+      "name": "Minimum monthly income",
+      "type": "threshold",
+      "field": "applicant.monthlyIncome",
+      "operator": "gte",
+      "value": 25000,
+      "failureOutcome": "MANUAL_REVIEW",
+      "reason": "Income is below the configured threshold."
+    },
+    {
+      "id": "R004",
+      "name": "Debt-to-income review threshold",
+      "type": "threshold",
+      "field": "financial.debtToIncome",
+      "operator": "lte",
+      "value": 0.45,
+      "failureOutcome": "MANUAL_REVIEW",
+      "reason": "Debt-to-income ratio exceeds the configured threshold."
+    },
+    {
+      "id": "R005",
+      "name": "Identity verification",
+      "type": "dependency",
+      "dependency": "identity",
+      "failureOutcome": "RETRY",
+      "reason": "Identity verification dependency is temporarily unavailable."
+    }
+  ],
+  "decision": {
+    "defaultOutcome": "APPROVED",
+    "precedence": ["REJECTED", "MANUAL_REVIEW", "RETRY", "APPROVED"]
+  },
+  "execution": {
+    "maxRetries": 2,
+    "retryDelayMs": 0
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "scoreme-resilient-decision-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Configurable, auditable workflow decision platform for the ScoreMe hackathon",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test",
+    "test:coverage": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "zod": "^3.24.2",
+    "supertest": "^7.1.0"
+  }
+}
